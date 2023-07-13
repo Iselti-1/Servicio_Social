@@ -1,0 +1,15 @@
+#Generar un archivo de texto con cada individuo
+#MGMM_01
+
+#Extraer a cada individo y generar su bed/bim/fam
+plink --bfile MGM1 --keep MGMM_01 --make-bed --out MGMM_01
+
+#Identificar info faltante por individuo
+plink --bfile MGMM_01 --missing --out MGMM_01
+
+awk '$3 == 1 || $1 == 0 || $1 == 23 || $1 == 24 || $1 == 25' MGMM_01.lmiss | awk '{print $2}' > MGMM_01_rs2rem
+#24886  124430 1119870
+
+#Remover rs's listados en MGMM_01_rs2rem
+plink --bfile MGMM_01 --exclude MGMM_01_rs2rem --make-bed --out MGMM_01_clean
+
